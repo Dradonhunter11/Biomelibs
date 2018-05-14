@@ -80,6 +80,21 @@ namespace BiomeLibrary
 	            world = instance.GetModWorld<BiomeWorld>();
 	        }
 	        world.addBlock(biomeName, blockName);
-	    }    
+	    }
+
+        public static void setBlockMin(String biomeName, int limit) {
+            if (name.Contains(biomeName))
+            {
+                BiomeList[biomeName].SetMinTile(limit);
+            }
+        }
+
+        public static void SetCondition(String biomeName, Func<bool> condition)
+        {
+            if (name.Contains(biomeName))
+            {
+                BiomeList[biomeName].SetCondition(condition);
+            }
+        }
     }
 }

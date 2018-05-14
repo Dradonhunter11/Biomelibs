@@ -15,14 +15,17 @@ namespace BiomeLibrary
         public Collection<String> blockList;
         public int biomeTileCount = 0;
         public byte biomeID;
-        private readonly int minTileRequired = 100;
+        private int minTileRequired;
         private bool valid;
         private bool isSpreading;
+
+        private Func<bool> condition;
+
         public Mod mod;
 
         public BiomeSkeleton(int minTileRequired, Mod mod)
         {
-            this.minTileRequired = 100;
+            this.minTileRequired = minTileRequired;
             blockList = new Collection<string>();
             this.mod = mod;
         }
@@ -69,7 +72,11 @@ namespace BiomeLibrary
 
         public bool isValid()
         {
-            return biomeTileCount > 150;
+            bool c = true;
+            if (condition != null) {
+                c = condition.Invoke();
+            }
+            return biomeTileCount > minTileRequired && c;
         }
 		
 		public bool checkYCoord(int j) {
@@ -80,5 +87,14 @@ namespace BiomeLibrary
         {
             return i > 0 && i < Main.ActiveWorldFileData.WorldSizeX;
         }
+
+        public void SetCondition(Func<bool> flag)
+        {
+             condition = flag;
+        }
+
+        public void SetMinTile(int minTile) {
+            minTileRequired = minTile;
+        } 
     }
 }
