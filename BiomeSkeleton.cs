@@ -12,12 +12,13 @@ namespace BiomeLibrary
 {
     public class BiomeSkeleton
     {
-        public Collection<String> blockList;
+        public List<String> blockList;
         public int biomeTileCount = 0;
         public byte biomeID;
         private int minTileRequired;
         private bool valid;
         private bool isSpreading;
+        private string customHallowAltGenerationMessage;
 
         private Func<bool> condition;
 
@@ -26,7 +27,7 @@ namespace BiomeLibrary
         public BiomeSkeleton(int minTileRequired, Mod mod)
         {
             this.minTileRequired = minTileRequired;
-            blockList = new Collection<string>();
+            blockList = new List<string>();
             this.mod = mod;
         }
 
@@ -40,22 +41,10 @@ namespace BiomeLibrary
             biomeTileCount = 0;
             Vector2 plr_pos = Main.player[Main.myPlayer].Center / 16;
             Vector2 sc_size = new Vector2(Main.screenWidth, Main.screenHeight) / 32;
-            int light_size = 20;
+            int light_size = 5;
 
-            for (int x = 0; x < blockList.Count; x++)
-            {
-                for (int i = (int)(plr_pos.X - sc_size.X) - light_size; i < (plr_pos.X + sc_size.X) + light_size; i++)
-                {
-                    for (int j = (int)(plr_pos.Y - sc_size.Y) - light_size; j < (plr_pos.Y + sc_size.Y) + light_size; j++)
-                    {
-                        //check for tiles based on Main.tile[i, j].type
-						
-                        if (checkXCoord(i) && checkYCoord(j) && Main.tile[i, j].type == (ushort)mod.TileType(blockList[x]))
-                        {
-                            biomeTileCount++;
-                        }
-                    }
-                }
+            foreach(String str in blockList) {
+                biomeTileCount += tileCounts[mod.TileType(str)];
             }
             return biomeTileCount;
         }
@@ -95,6 +84,14 @@ namespace BiomeLibrary
 
         public void SetMinTile(int minTile) {
             minTileRequired = minTile;
-        } 
+        }
+
+        public void setMessage(string message) {
+            customHallowAltGenerationMessage = message;
+        }
+
+        public string getMessage() {
+            return customHallowAltGenerationMessage;
+        }
     }
 }

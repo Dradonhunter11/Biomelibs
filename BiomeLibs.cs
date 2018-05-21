@@ -43,13 +43,15 @@ namespace BiomeLibrary
 	    public override void Load()
 	    {
 	        instance = this;
-	        name = new Collection<string>();
-            biomeRegistery = new Dictionary<string, bool>();
-	        BiomeList = new Dictionary<string, BiomeSkeleton>();
-            hallowAltList = new Collection<string>();
+            reset();
         }
 
-
+        internal static void reset() {
+            name = new Collection<string>();
+            biomeRegistery = new Dictionary<string, bool>();
+            BiomeList = new Dictionary<string, BiomeSkeleton>();
+            hallowAltList = new Collection<string>();
+        }
 
 	    public static void RegisterNewBiome(String biomeName, int minTileRequired, Mod mod)
 	    {
@@ -60,11 +62,14 @@ namespace BiomeLibrary
 	        BiomeList.Add(biomeName, new BiomeSkeleton(minTileRequired, mod));
 	    }
 
-	    public static void addHallowAltBiome(String biomeName)
+	    public static void addHallowAltBiome(String biomeName, string message = null)
 	    {
 	        if (name.Contains(biomeName))
 	        {
                 hallowAltList.Add(biomeName);
+                if (message != null) {
+                    BiomeList[biomeName].setMessage(message);
+                }
 	        }
 	    }
 

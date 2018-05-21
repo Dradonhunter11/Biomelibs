@@ -1,2 +1,3 @@
 Just another biome manager mod, doesn't add gameplay but rather something for developping. Now with hallow alt generator! Read forum homepage for more detail! 
-- Fixed crash when going on world edge 
+- Added possible to add condition to biome other than min tile requirement!
+- Added a way to modify tile requirement if you wanna change it outside of registering biome.

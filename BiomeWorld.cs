@@ -15,11 +15,16 @@ namespace BiomeLibrary
     public class BiomeWorld : ModWorld
     {
 
-
         public override void Load(TagCompound tag)
         {
+
             BiomeLibs.world = mod.GetModWorld<BiomeWorld>();
+            resetList();
             base.Load(tag);
+        }
+
+        public void resetList() {
+            BiomeLibs.reset();
         }
 
 
@@ -56,8 +61,8 @@ namespace BiomeLibrary
         {
             Main.hardMode = true;
 
-            if (BiomeLibs.hallowAltList.Count != 0)
-            {
+            /*if (BiomeLibs.hallowAltList.Count != 0)
+            {*/
 
                 list[0] = (new PassLegacy("Hardmode Good", delegate
                 {
@@ -98,19 +103,29 @@ namespace BiomeLibrary
                         num3 = (int)((float)Main.maxTilesX * (1f - num2));
                     }
 
-                    int rand = Main.rand.Next(BiomeLibs.hallowAltList.Count);
+                    int rand = Main.rand.Next(0,BiomeLibs.hallowAltList.Count);
+                    rand = 0;
                     if (rand == 0)
                     {
-                        WorldGen.GERunner(num4, 0, 3f * -(float)num5, 5f, false);
+                        Main.NewText("Hallow has generated", Color.Red);
+                        WorldGen.GERunner(num3, 0, 3f * (float)3*num5, 5f, true);
                     }
                     else
                     {
-                        Main.NewText((BiomeLibs.name[rand - 1]) + " hallow alt has been generated", Color.Red);
+                        string message = BiomeLibs.BiomeList[BiomeLibs.name[rand]].getMessage();
+                        if (message != null)
+                        {
+                            Main.NewText(message, Color.Red);
+                        }
+                        else {
+                            Main.NewText(BiomeLibs.name[rand] + "has generated", Color.Red);
+                        }
                         
-                        BWRunner(num3, 0, blockFinder(BiomeLibs.name[rand - 1]), BiomeLibs.BiomeList[BiomeLibs.name[rand-1]].mod, (float)(3 * num5), 5f);
+
+                        BWRunner(num3, 0, blockFinder(BiomeLibs.name[rand]), BiomeLibs.BiomeList[BiomeLibs.name[rand]].mod, (float)(3 * num5), 5f);
                     }
                 }));
-            }
+            //}
         }
 
         private String[] blockFinder(String biomeName)
@@ -123,6 +138,7 @@ namespace BiomeLibrary
                 if (BiomeLibs.BiomeList[biomeName].blockList[i].Contains("dirt") ||
                     BiomeLibs.BiomeList[biomeName].blockList[i].Contains("Dirt"))
                 {
+                    blockList[3] = BiomeLibs.BiomeList[biomeName].blockList[i];
                 }
                 else if (BiomeLibs.BiomeList[biomeName].blockList[i].Contains("sand") ||
                          BiomeLibs.BiomeList[biomeName].blockList[i].Contains("Sand"))
