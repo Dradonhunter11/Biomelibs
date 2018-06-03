@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.Generation;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.World.Generation;
@@ -14,6 +15,36 @@ namespace BiomeLibrary
 {
     public class BiomeWorld : ModWorld
     {
+
+        public override void Initialize()
+        {
+            RegisterMarble();
+            RegisterGranite();
+            RegisterHell();
+        }
+
+        private static void RegisterGranite()
+        {
+            BiomeLibs.RegisterNewBiome("granite", 80, null);
+            BiomeLibs.AddBlockInBiomeByID("granite", new int[] { TileID.Granite });
+        }
+
+        private static void RegisterMarble()
+        {
+            BiomeLibs.RegisterNewBiome("marble", 80, null);
+            BiomeLibs.AddBlockInBiomeByID("marble", new int[] { TileID.Marble });
+        }
+
+        private static void RegisterHell()
+        {
+            Func<bool> c = () => (Main.player[Main.myPlayer].position.Y / 16) > Main.maxTilesY - 200;
+            BiomeLibs.RegisterNewBiome("hell", 0, null);
+            BiomeLibs.SetCondition("hell", c);
+        }
+
+        public override void PostUpdate()
+        {
+        }
 
         public override void Load(TagCompound tag)
         {
@@ -28,7 +59,7 @@ namespace BiomeLibrary
         }
 
 
-        public void addBlock(String biomeName, String[] block)
+        internal void addBlock(String biomeName, String[] block)
         {
 
             for (int i = 0; i < BiomeLibs.name.Count; i++)
@@ -40,6 +71,17 @@ namespace BiomeLibrary
             }
         }
 
+        internal void addBlock(String biomeName, int[] blockID)
+        {
+
+            for (int i = 0; i < BiomeLibs.name.Count; i++)
+            {
+                if (BiomeLibs.name[i] == biomeName)
+                {
+                    BiomeLibs.BiomeList[biomeName].registerTile(blockID);
+                }
+            }
+        }
 
         public override void TileCountsAvailable(int[] tileCounts)
         {
@@ -104,7 +146,7 @@ namespace BiomeLibrary
                     }
 
                     int rand = Main.rand.Next(0,BiomeLibs.hallowAltList.Count);
-                    rand = 0;
+                    
                     if (rand == 0)
                     {
                         Main.NewText("Hallow has generated", Color.Red);
@@ -112,17 +154,17 @@ namespace BiomeLibrary
                     }
                     else
                     {
-                        string message = BiomeLibs.BiomeList[BiomeLibs.name[rand]].getMessage();
+                        string message = BiomeLibs.BiomeList[BiomeLibs.hallowAltList[rand]].getMessage();
                         if (message != null)
                         {
                             Main.NewText(message, Color.Red);
                         }
                         else {
-                            Main.NewText(BiomeLibs.name[rand] + "has generated", Color.Red);
+                            Main.NewText(BiomeLibs.hallowAltList[rand] + "has generated", Color.Red);
                         }
                         
 
-                        BWRunner(num3, 0, blockFinder(BiomeLibs.name[rand]), BiomeLibs.BiomeList[BiomeLibs.name[rand]].mod, (float)(3 * num5), 5f);
+                        BWRunner(num3, 0, blockFinder(BiomeLibs.hallowAltList[rand]), BiomeLibs.BiomeList[BiomeLibs.hallowAltList[rand]].mod, (float)(3 * num5), 5f);
                     }
                 }));
             //}

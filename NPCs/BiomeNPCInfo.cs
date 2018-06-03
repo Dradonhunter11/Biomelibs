@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.ModLoader;
 
-namespace BiomeLibrary
+namespace BiomeLibrary.NPCs
 {
-    class Mods
+    class BiomeNPCInfo
     {
-        
+        public string layer;
+        public int mobID;
+
+
     }
 }

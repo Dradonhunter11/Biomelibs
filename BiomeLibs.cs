@@ -87,6 +87,15 @@ namespace BiomeLibrary
 	        world.addBlock(biomeName, blockName);
 	    }
 
+        public static void AddBlockInBiomeByID(String biomeName, int[] blockID)
+        {
+            if (world == null)
+            {
+                world = instance.GetModWorld<BiomeWorld>();
+            }
+            world.addBlock(biomeName, blockID);
+        }
+
         public static void setBlockMin(String biomeName, int limit) {
             if (name.Contains(biomeName))
             {
@@ -96,6 +105,7 @@ namespace BiomeLibrary
 
         public static void SetCondition(String biomeName, Func<bool> condition)
         {
+            
             if (name.Contains(biomeName))
             {
                 BiomeList[biomeName].SetCondition(condition);

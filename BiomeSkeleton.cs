@@ -13,12 +13,14 @@ namespace BiomeLibrary
     public class BiomeSkeleton
     {
         public List<String> blockList;
+        public List<int> blockListID;
         public int biomeTileCount = 0;
         public byte biomeID;
         private int minTileRequired;
         private bool valid;
         private bool isSpreading;
         private string customHallowAltGenerationMessage;
+        
 
         private Func<bool> condition;
 
@@ -28,6 +30,7 @@ namespace BiomeLibrary
         {
             this.minTileRequired = minTileRequired;
             blockList = new List<string>();
+            blockListID = new List<int>();
             this.mod = mod;
         }
 
@@ -43,8 +46,8 @@ namespace BiomeLibrary
             Vector2 sc_size = new Vector2(Main.screenWidth, Main.screenHeight) / 32;
             int light_size = 5;
 
-            foreach(String str in blockList) {
-                biomeTileCount += tileCounts[mod.TileType(str)];
+            foreach(int i in blockListID) {
+                biomeTileCount += tileCounts[i];
             }
             return biomeTileCount;
         }
@@ -55,7 +58,16 @@ namespace BiomeLibrary
             for (int i = 0; i < blockName.Length; i++)
             {
                 blockList.Add(blockName[i]);
+                blockListID.Add(mod.TileType(blockName[i]));
                 text += blockList[i] + " ";
+            }
+        }
+
+        public void registerTile(int[] blockID)
+        {
+            for (int i = 0; i < blockID.Length; i++)
+            {
+                blockListID.Add(blockID[i]);
             }
         }
 
@@ -65,7 +77,7 @@ namespace BiomeLibrary
             if (condition != null) {
                 c = condition.Invoke();
             }
-            return biomeTileCount > minTileRequired && c;
+            return biomeTileCount >= minTileRequired && c;
         }
 		
 		public bool checkYCoord(int j) {
